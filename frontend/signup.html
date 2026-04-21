@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer Sign Up - Garib Awas Yojana MIS</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-body">
+    <div class="auth-wrapper">
+        <!-- Branding -->
+        <div class="auth-brand">
+            <div class="brand-icon">
+                <i data-lucide="shield-check" style="width:32px;height:32px;color:#fff;"></i>
+            </div>
+            <h1>Officer Registration</h1>
+            <p>Create your officer account for Garib Awas Yojana MIS</p>
+        </div>
+
+        <!-- Signup Card -->
+        <div class="auth-card auth-card-wide">
+            <h2 class="auth-title">Create Account</h2>
+            <p class="auth-subtitle">Fill in your official details below</p>
+
+            <!-- Error / Success Message -->
+            <div id="error-msg" class="auth-error" style="display:none;"></div>
+            <div id="success-msg" class="auth-success" style="display:none;"></div>
+
+            <!-- Form -->
+            <form id="signup-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="user" style="width:16px;height:16px;"></i> Full Name
+                        </label>
+                        <input type="text" id="name" class="form-input" placeholder="Enter full name" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="phone" style="width:16px;height:16px;"></i> Phone Number
+                        </label>
+                        <input type="tel" id="phone" class="form-input" placeholder="e.g. 9876543210" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="mail" style="width:16px;height:16px;"></i> Email Address
+                    </label>
+                    <input type="email" id="email" class="form-input" placeholder="officer@example.com" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="map-pin" style="width:16px;height:16px;"></i> District
+                        </label>
+                        <input type="text" id="district" class="form-input" placeholder="e.g. Jaipur" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="map" style="width:16px;height:16px;"></i> State
+                        </label>
+                        <select id="state" class="form-input form-select" required>
+                            <option value="">Select State</option>
+                            <option>Andhra Pradesh</option>
+                            <option>Arunachal Pradesh</option>
+                            <option>Assam</option>
+                            <option>Bihar</option>
+                            <option>Chhattisgarh</option>
+                            <option>Goa</option>
+                            <option>Gujarat</option>
+                            <option>Haryana</option>
+                            <option>Himachal Pradesh</option>
+                            <option>Jharkhand</option>
+                            <option>Karnataka</option>
+                            <option>Kerala</option>
+                            <option>Madhya Pradesh</option>
+                            <option>Maharashtra</option>
+                            <option>Manipur</option>
+                            <option>Meghalaya</option>
+                            <option>Mizoram</option>
+                            <option>Nagaland</option>
+                            <option>Odisha</option>
+                            <option>Punjab</option>
+                            <option>Rajasthan</option>
+                            <option>Sikkim</option>
+                            <option>Tamil Nadu</option>
+                            <option>Telangana</option>
+                            <option>Tripura</option>
+                            <option>Uttar Pradesh</option>
+                            <option>Uttarakhand</option>
+                            <option>West Bengal</option>
+                            <option>Delhi</option>
+                            <option>Jammu & Kashmir</option>
+                            <option>Ladakh</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="lock" style="width:16px;height:16px;"></i> Password
+                        </label>
+                        <input type="password" id="password" class="form-input" placeholder="Min 6 characters" required minlength="6" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Confirm Password
+                        </label>
+                        <input type="password" id="confirmPassword" class="form-input" placeholder="Re-enter password" required />
+                    </div>
+                </div>
+
+                <button type="submit" id="signup-btn" class="btn-primary">
+                    <span id="btn-text">Create Officer Account</span>
+                    <span id="btn-loader" class="btn-loader" style="display:none;"></span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="/login">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // If already logged in, redirect based on role
+        if (getToken()) {
+            const user = getUser();
+            if (user && user.role === 'officer') window.location.href = '/officer/';
+            else window.location.href = '/user/';
+        }
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorMsg = document.getElementById('error-msg');
+            const successMsg = document.getElementById('success-msg');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            const signupBtn = document.getElementById('signup-btn');
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorMsg.textContent = 'Passwords do not match.';
+                errorMsg.style.display = 'flex';
+                return;
+            }
+
+            btnText.textContent = 'Creating Account...';
+            btnLoader.style.display = 'inline-block';
+            signupBtn.disabled = true;
+
+            const payload = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                district: document.getElementById('district').value.trim(),
+                state: document.getElementById('state').value,
+                password: password
+            };
+
+            try {
+                const res = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    successMsg.textContent = data.message || 'Account created! Redirecting to Sign In...';
+                    successMsg.style.display = 'flex';
+                    document.getElementById('signup-form').reset();
+                    setTimeout(() => { window.location.href = '/login'; }, 2000);
+                } else {
+                    errorMsg.textContent = data.error || 'Signup failed.';
+                    errorMsg.style.display = 'flex';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Could not connect to server.';
+                errorMsg.style.display = 'flex';
+            } finally {
+                btnText.textContent = 'Create Officer Account';
+                btnLoader.style.display = 'none';
+                signupBtn.disabled = false;
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

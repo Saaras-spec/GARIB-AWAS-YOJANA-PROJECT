@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Records - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .banner {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--saffron);
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            margin-bottom: 2rem;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+        .banner-text { font-size: 1.05rem; color: var(--navy); }
+        .banner-actions { display: flex; gap: 1rem; align-items: center; }
+        .btn-undo {
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, var(--saffron) 0%, #e68a2e 100%);
+            color: white; border: none; border-radius: 0.75rem; cursor: pointer;
+            font-weight: 600; box-shadow: 0 4px 12px rgba(255, 153, 51, 0.3);
+        }
+        .btn-restore {
+            padding: 0.75rem 1.25rem; background: white; color: var(--saffron);
+            border: 2px solid var(--saffron); border-radius: 0.75rem; cursor: pointer;
+            font-weight: 600; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .btn-dismiss {
+            padding: 0.75rem 1.25rem; background: transparent; color: var(--text-secondary);
+            border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 0.75rem; cursor: pointer; font-weight: 600;
+        }
+        .status-badge { padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.85rem; font-weight: 700; }
+        .status-completed { background-color: rgba(19,136,8,0.1); color: var(--green); }
+        .status-pending { background-color: rgba(255,153,51,0.1); color: var(--saffron); }
+        .status-construction { background-color: rgba(0,0,128,0.1); color: var(--navy); }
+        .action-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; border: none; }
+        .btn-start { background: linear-gradient(135deg, var(--navy) 0%, #3b82f6 100%); color: white; box-shadow: 0 4px 12px rgba(0,0,128,0.2); }
+        .btn-mark { background: linear-gradient(135deg, var(--green) 0%, #10b981 100%); color: white; box-shadow: 0 4px 12px rgba(19,136,8,0.2); }
+        .btn-move { background: #f3f4f6; color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-clear { background: var(--danger); color: white; box-shadow: 0 4px 12px rgba(220,38,38,0.2); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        thead { background-color: rgba(249, 250, 251, 0.5); border-bottom: 1px solid var(--border-color); }
+        th { padding: 1.25rem 1.5rem; font-weight: 600; color: var(--navy); }
+        td { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .td-name { font-weight: 500; }
+        .td-address { color: var(--text-secondary); }
+        .td-actions { display: flex; gap: 0.75rem; align-items: center; }
+    </style>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <main class="main-content">
+            <h1 class="page-title">Manage Records</h1>
+
+            <div id="undo-banner" class="banner">
+                <div class="banner-text" id="undo-text"></div>
+                <div class="banner-actions">
+                    <button id="btn-undo" class="btn-undo">Undo Action</button>
+                    <button id="btn-restore-all" class="btn-restore" style="display: none;">Restore All</button>
+                    <button id="btn-dismiss" class="btn-dismiss">Dismiss</button>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Current Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="records-body"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/manage.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

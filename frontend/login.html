@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Garib Awas Yojana MIS</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-body">
+    <div class="auth-wrapper">
+        <!-- Branding -->
+        <div class="auth-brand">
+            <div class="brand-icon">
+                <i data-lucide="home" style="width:32px;height:32px;color:#fff;"></i>
+            </div>
+            <h1>Garib Awas Yojana</h1>
+            <p>Management Information System</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="auth-card">
+            <h2 class="auth-title">Welcome Back</h2>
+            <p class="auth-subtitle">Sign in to continue to your dashboard</p>
+
+            <!-- Toggle -->
+            <div class="login-toggle">
+                <button class="toggle-btn active" id="toggle-officer" onclick="setLoginType('officer')">
+                    <i data-lucide="shield" style="width:16px;height:16px;"></i> Officer
+                </button>
+                <button class="toggle-btn" id="toggle-user" onclick="setLoginType('user')">
+                    <i data-lucide="user" style="width:16px;height:16px;"></i> User
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-msg" class="auth-error" style="display:none;"></div>
+
+            <!-- Form -->
+            <form id="login-form">
+                <!-- Officer: Email field -->
+                <div class="form-group" id="email-group">
+                    <label class="form-label">
+                        <i data-lucide="mail" style="width:16px;height:16px;"></i> Email Address
+                    </label>
+                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
+                </div>
+                <!-- User: Name field -->
+                <div class="form-group" id="name-group" style="display:none;">
+                    <label class="form-label">
+                        <i data-lucide="user" style="width:16px;height:16px;"></i> Name
+                    </label>
+                    <input type="text" id="name" class="form-input" placeholder="Enter your registered name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">
+                        <i data-lucide="lock" style="width:16px;height:16px;"></i> Password
+                    </label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required />
+                </div>
+
+                <div id="user-hint" class="user-hint" style="display:none;">
+                    <i data-lucide="info" style="width:14px;height:14px;"></i>
+                    For user login, your password is the same as your registered name.
+                </div>
+
+                <button type="submit" id="login-btn" class="btn-primary">
+                    <span id="btn-text">Sign In</span>
+                    <span id="btn-loader" class="btn-loader" style="display:none;"></span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Officer without an account? <a href="/signup">Sign Up Here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        // If already logged in, redirect based on role
+        if (getToken()) {
+            const user = getUser();
+            if (user && user.role === 'officer') window.location.href = '/officer/';
+            else window.location.href = '/user/';
+        }
+
+        let currentLoginType = 'officer';
+
+        function setLoginType(type) {
+            currentLoginType = type;
+            document.getElementById('toggle-officer').classList.toggle('active', type === 'officer');
+            document.getElementById('toggle-user').classList.toggle('active', type === 'user');
+            document.getElementById('user-hint').style.display = type === 'user' ? 'flex' : 'none';
+            document.getElementById('error-msg').style.display = 'none';
+
+            // Toggle email vs name field
+            const emailGroup = document.getElementById('email-group');
+            const nameGroup = document.getElementById('name-group');
+            const emailInput = document.getElementById('email');
+            const nameInput = document.getElementById('name');
+
+            if (type === 'user') {
+                emailGroup.style.display = 'none';
+                emailInput.removeAttribute('required');
+                nameGroup.style.display = 'block';
+                nameInput.setAttribute('required', '');
+            } else {
+                emailGroup.style.display = 'block';
+                emailInput.setAttribute('required', '');
+                nameGroup.style.display = 'none';
+                nameInput.removeAttribute('required');
+            }
+
+            lucide.createIcons();
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('error-msg');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+            const loginBtn = document.getElementById('login-btn');
+
+            errorMsg.style.display = 'none';
+            btnText.textContent = 'Signing in...';
+            btnLoader.style.display = 'inline-block';
+            loginBtn.disabled = true;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, name, password, loginType: currentLoginType })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    saveAuth(data.token, data.user);
+                    if (data.user.role === 'officer') {
+                        window.location.href = '/officer/';
+                    } else {
+                        window.location.href = '/user/';
+                    }
+                } else {
+                    errorMsg.textContent = data.error || 'Login failed.';
+                    errorMsg.style.display = 'flex';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Could not connect to server.';
+                errorMsg.style.display = 'flex';
+            } finally {
+                btnText.textContent = 'Sign In';
+                btnLoader.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+
+        lucide.createIcons();
+    </script>
+</body>
+</html>

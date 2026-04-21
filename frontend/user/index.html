@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <!-- Sidebar injected via JS -->
+        <main class="main-content">
+            <h1 class="page-title" id="welcome-message">Welcome, User</h1>
+            
+            <div class="metrics-grid">
+                <!-- Card 1: Status -->
+                <div class="card" id="card-status">
+                    <div class="card-title" id="status-title">
+                        <i data-lucide="check-circle"></i> Application Status
+                    </div>
+                    <div class="card-value" id="user-status">Loading...</div>
+                </div>
+
+                <!-- Card 2: Officer Assigned -->
+                <div class="card" id="card-officer">
+                    <div class="card-title" style="color: var(--info);">
+                        <i data-lucide="shield-check"></i> Officer Assigned
+                    </div>
+                    <div class="card-value" id="officer-name" style="font-size: 1.5rem; margin-top: 0.5rem; color: var(--navy);">Loading...</div>
+                </div>
+
+                <!-- Card 3: Current Stage -->
+                <div class="card" id="card-stage">
+                    <div class="card-title">
+                        <i data-lucide="construction"></i> Project Stage
+                    </div>
+                    <div class="card-value" id="project-stage" style="font-size: 1.5rem; margin-top: 0.5rem;">Loading...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/user-dashboard.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

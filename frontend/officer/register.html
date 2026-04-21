@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Beneficiary - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <main class="main-content">
+            <h1 class="page-title">Register New Beneficiary</h1>
+            <div class="form-container">
+                <div id="message-container" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600;"></div>
+                
+                <form id="registration-form">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-input" placeholder="Type a previous name to instantly auto-fill..." required />
+                    </div>
+                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label class="form-label">Age</label>
+                            <input type="number" id="age" name="age" class="form-input" placeholder="e.g. 35" required />
+                        </div>
+                        <div>
+                            <label class="form-label">Family Members Count</label>
+                            <input type="number" id="familyMembers" name="familyMembers" class="form-input" placeholder="e.g. 4" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Annual Income (₹)</label>
+                        <input type="number" id="income" name="income" class="form-input" placeholder="e.g. 150000" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address (Auto-locates on Map)</label>
+                        <textarea id="address" name="address" class="form-input" rows="2" placeholder="e.g. Jaipur, Rajasthan" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Location Panel (Click Map to manually adjust)</label>
+                        <div style="height: 350px; width: 100%; border-radius: 1rem; overflow: hidden; border: 1px solid var(--border-color); position: relative; z-index: 0;">
+                            <div id="map"></div>
+                        </div>
+                        <div id="coordinates-info" style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; display: none;">
+                            Coordinates Pinned: <strong style="color: var(--navy);" id="coordinates-text"></strong>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        Register Beneficiary
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/register.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

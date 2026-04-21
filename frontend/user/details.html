@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <!-- Sidebar injected via JS -->
+        <main class="main-content">
+            <h1 class="page-title">Personal Records</h1>
+            
+            <div class="form-container">
+                <div id="message-container" style="display: none; margin-bottom: 1.5rem; padding: 1rem; border-radius: 0.75rem; font-weight: 600;"></div>
+                
+                <form id="details-form">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="name" class="form-input" disabled />
+                    </div>
+                    
+                    <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label class="form-label">Age</label>
+                            <input type="number" id="age" class="form-input" disabled />
+                        </div>
+                        <div>
+                            <label class="form-label">Family Members Count</label>
+                            <input type="number" id="familyMembers" class="form-input" disabled />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Annual Income (₹)</label>
+                        <input type="number" id="income" class="form-input" disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Registered Address</label>
+                        <textarea id="address" class="form-input" rows="3" disabled></textarea>
+                    </div>
+
+                    <div class="form-info" style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,128,0.05); border-radius: 0.75rem; border: 1px solid var(--border-color); font-size: 0.9rem; color: var(--navy); display: flex; align-items: flex-start; gap: 0.5rem;">
+                        <i data-lucide="info" style="width:18px;height:18px;flex-shrink:0;"></i>
+                        <p>These details are read-only. If you need to update any information, please contact your assigned officer.</p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/user-details.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
