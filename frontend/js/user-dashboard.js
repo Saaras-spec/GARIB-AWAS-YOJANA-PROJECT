@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fetch from absolute URL with content-type validation as requested
-    const API_URL = "http://localhost:5001/api/user/me";
+    const API_URL = "https://garib-awas-yojana-project.onrender.com/api/user/me";
     const token = localStorage.getItem("token");
     
     fetch(API_URL, { 
