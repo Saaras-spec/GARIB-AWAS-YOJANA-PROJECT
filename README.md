@@ -95,7 +95,6 @@ GARIB-AWAS-YOJANA-PROJECT/
 │
 ├── .gitignore
 ├── package.json                      # Root package (install & start scripts)
-├── start-portal.sh                   # One-click startup script (macOS/Linux)
 └── README.md
 ```
 
@@ -136,12 +135,6 @@ GARIB-AWAS-YOJANA-PROJECT/
    npm start
    ```
    The app will be available at **http://localhost:5001**
-
-### Quick Start (macOS/Linux)
-```bash
-chmod +x start-portal.sh
-./start-portal.sh
-```
 
 ---
 
