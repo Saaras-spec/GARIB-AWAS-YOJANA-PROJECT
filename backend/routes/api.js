@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const beneficiaryController = require('../controllers/beneficiaryController');
-const { verifyToken, officerOnly } = require('../middleware/auth');
+const { verifyToken, officerOnly } = require('../middleware/verifyAuth');
 
 // All beneficiary routes are protected — user must be logged in
 router.get('/user/me', verifyToken, beneficiaryController.getMyData);

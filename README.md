@@ -48,7 +48,7 @@ GARIB-AWAS-YOJANA-PROJECT/
 │   │   └── beneficiaryController.js  # CRUD operations for beneficiaries
 │   │
 │   ├── middleware/
-│   │   └── auth.js                   # JWT verification & officer-only guard
+│   │   └── verifyAuth.js             # JWT verification & officer-only guard
 │   │
 │   ├── models/
 │   │   ├── Beneficiary.js            # Beneficiary schema (GeoJSON location)
@@ -56,7 +56,7 @@ GARIB-AWAS-YOJANA-PROJECT/
 │   │
 │   ├── routes/
 │   │   ├── api.js                    # Protected beneficiary & statistics routes
-│   │   └── auth.js                   # Auth routes (signup, login)
+│   │   └── authRoutes.js             # Auth routes (signup, login)
 │   │
 │   ├── server.js                     # Express server entry point
 │   ├── package.json                  # Backend dependencies
