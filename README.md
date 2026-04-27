@@ -58,7 +58,6 @@ GARIB-AWAS-YOJANA-PROJECT/
 │   │   ├── api.js                    # Protected beneficiary & statistics routes
 │   │   └── auth.js                   # Auth routes (signup, login)
 │   │
-│   ├── fix-officer-assignment.js     # One-time migration script
 │   ├── server.js                     # Express server entry point
 │   ├── package.json                  # Backend dependencies
 │   └── package-lock.json
