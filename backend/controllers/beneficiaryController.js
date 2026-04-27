@@ -1,9 +1,10 @@
 const Beneficiary = require('../models/Beneficiary');
 
-// GET /api/beneficiaries — Fetch all beneficiaries
+// GET /api/beneficiaries — Fetch beneficiaries registered by the logged-in officer
 exports.getAll = async (req, res) => {
     try {
-        const beneficiaries = await Beneficiary.find();
+        const beneficiaries = await Beneficiary.find({ officerId: req.user.id })
+            .populate('officerId', 'name district');
         res.json(beneficiaries);
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
@@ -28,13 +29,14 @@ exports.getMyData = async (req, res) => {
     }
 };
 
-// GET /api/statistics — Dashboard statistics
+// GET /api/statistics — Dashboard statistics (scoped to logged-in officer)
 exports.getStatistics = async (req, res) => {
     try {
-        const total = await Beneficiary.countDocuments();
-        const pending = await Beneficiary.countDocuments({ status: 'Pending' });
-        const underConstruction = await Beneficiary.countDocuments({ status: 'Under Construction' });
-        const completed = await Beneficiary.countDocuments({ status: 'Completed' });
+        const filter = { officerId: req.user.id };
+        const total = await Beneficiary.countDocuments(filter);
+        const pending = await Beneficiary.countDocuments({ ...filter, status: 'Pending' });
+        const underConstruction = await Beneficiary.countDocuments({ ...filter, status: 'Under Construction' });
+        const completed = await Beneficiary.countDocuments({ ...filter, status: 'Completed' });
 
         res.json({ total, pending, underConstruction, completed });
     } catch (error) {

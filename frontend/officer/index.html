@@ -8,6 +8,61 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js CDN (Feature 7) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <style>
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .chart-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--saffron) 0%, var(--white) 50%, var(--green) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .chart-card:hover::before { opacity: 1; }
+        .chart-card-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chart-wrapper canvas {
+            max-height: 300px;
+        }
+        @media (max-width: 900px) {
+            .charts-section { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <div id="app-container" class="app-container">
@@ -41,6 +96,26 @@
                         <i data-lucide="check-circle-2"></i> Completed
                     </div>
                     <div class="card-value" id="stats-completed">0</div>
+                </div>
+            </div>
+
+            <!-- Analytics Charts (Feature 7) -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-card-title">
+                        <i data-lucide="pie-chart" style="width:16px;height:16px;"></i> Status Distribution
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card-title">
+                        <i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i> Month-wise Registrations
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="registrationChart"></canvas>
+                    </div>
                 </div>
             </div>
         </main>

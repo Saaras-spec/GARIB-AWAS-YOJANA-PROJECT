@@ -3,14 +3,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const AUTH_TOKEN_KEY = 'token';
     const AUTH_USER_KEY = 'user';
+    const LAST_STATUS_KEY = 'lastSeenStatus';
+
     const user = JSON.parse(localStorage.getItem(AUTH_USER_KEY));
     const welcomeMsg = document.getElementById('welcome-message');
     if (welcomeMsg && user) {
         welcomeMsg.textContent = `Welcome, ${user.name}`;
     }
 
-    // Fetch from absolute URL with content-type validation as requested
-     const API_URL = "/api/user/me";
+    // ── Notification dismiss handler (Feature 4) ──
+    document.getElementById('btn-dismiss-notif').addEventListener('click', () => {
+        const banner = document.getElementById('status-notification');
+        banner.classList.remove('visible');
+        // Store current status so banner doesn't reappear
+        const currentStatus = banner.getAttribute('data-current-status');
+        if (currentStatus) {
+            localStorage.setItem(LAST_STATUS_KEY, currentStatus);
+        }
+    });
+
+    // Fetch user data
+    const API_URL = "/api/user/me";
     const token = localStorage.getItem("token");
     
     fetch(API_URL, { 
@@ -50,14 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Populate officer name if link exists, otherwise "Not Assigned"
             officerNameEl.textContent = data.officerId?.name || "Not Assigned";
 
-            // 3. Current Stage Logic
-            const stageEl = document.getElementById('project-stage');
-            stageEl.textContent = data.status || 'Not Started';
-            
-            // Apply standard design colors to stage
-            if (data.status === 'Completed') stageEl.style.color = 'var(--green)';
-            else if (data.status === 'Under Construction') stageEl.style.color = 'var(--navy)';
-            else stageEl.style.color = 'var(--text-secondary)';
+            // 3. Progress Tracker (Feature 3)
+            renderProgressTracker(data.status);
+
+            // 4. Status Notification Badge (Feature 4)
+            checkStatusNotification(data.status);
 
             lucide.createIcons();
         })
@@ -74,4 +84,77 @@ document.addEventListener("DOMContentLoaded", () => {
                 lucide.createIcons();
             }
         });
+
+    // ── Progress Tracker Renderer (Feature 3) ──
+    function renderProgressTracker(status) {
+        // Map status to step index
+        // Step 0 = Registered (always completed if user exists)
+        // Step 1 = Pending
+        // Step 2 = Under Construction
+        // Step 3 = Completed
+        const statusToStep = {
+            'Pending': 1,
+            'Under Construction': 2,
+            'Completed': 3
+        };
+
+        const currentStepIndex = statusToStep[status] ?? 1;
+        const steps = document.querySelectorAll('.progress-step');
+
+        steps.forEach((stepEl, index) => {
+            // Remove any existing state classes
+            stepEl.classList.remove('step-completed', 'step-current', 'step-future');
+
+            if (index < currentStepIndex) {
+                stepEl.classList.add('step-completed');
+                // Replace number with checkmark for completed steps
+                stepEl.querySelector('.step-circle').innerHTML = '✓';
+            } else if (index === currentStepIndex) {
+                stepEl.classList.add('step-current');
+            } else {
+                stepEl.classList.add('step-future');
+            }
+        });
+
+        // Step 0 (Registered) is always completed since the user exists
+        const firstStep = steps[0];
+        if (firstStep && currentStepIndex >= 1) {
+            firstStep.classList.remove('step-current', 'step-future');
+            firstStep.classList.add('step-completed');
+            firstStep.querySelector('.step-circle').innerHTML = '✓';
+        }
+
+        // Animate the green connecting line
+        const lineFill = document.getElementById('progress-line-fill');
+        if (lineFill) {
+            // Calculate width as percentage of the total track
+            // 0 steps completed = 0%, 1 = 33%, 2 = 66%, 3 = 100%
+            const completedSteps = Math.min(currentStepIndex, 3);
+            const pct = (completedSteps / 3) * 100;
+            // Use a slight delay for animation effect
+            setTimeout(() => {
+                lineFill.style.width = `${pct}%`;
+            }, 100);
+        }
+    }
+
+    // ── Status Notification Check (Feature 4) ──
+    function checkStatusNotification(currentStatus) {
+        const lastSeen = localStorage.getItem(LAST_STATUS_KEY);
+        const banner = document.getElementById('status-notification');
+
+        // Store current status on the banner element for the dismiss handler
+        banner.setAttribute('data-current-status', currentStatus);
+
+        if (lastSeen === null) {
+            // First visit — store current status, don't show banner
+            localStorage.setItem(LAST_STATUS_KEY, currentStatus);
+            return;
+        }
+
+        if (lastSeen !== currentStatus) {
+            // Status has changed since last visit — show notification
+            banner.classList.add('visible');
+        }
+    }
 });

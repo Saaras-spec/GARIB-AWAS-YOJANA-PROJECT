@@ -4,8 +4,8 @@
   "description": "Consolidated portal for Garib Awas Yojana MIS",
   "scripts": {
     "install-all": "npm install && cd backend && npm install",
-    "start": "cd backend && SERVE_FRONTEND=true node server.js"
+    "start": "cd backend && node server.js"
   },
   "devDependencies": {}
-  }
 }
+

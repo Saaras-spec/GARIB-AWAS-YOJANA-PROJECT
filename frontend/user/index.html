@@ -8,12 +8,173 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* ── Notification Banner (Feature 4) ── */
+        .notification-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.15rem 1.75rem;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #138808 0%, #16a34a 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 6px 20px rgba(19, 136, 8, 0.3);
+            animation: slideDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .notification-banner.visible { display: flex; }
+        .notification-banner .banner-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .notification-banner .banner-msg { flex: 1; }
+        .notification-banner .btn-dismiss-notif {
+            padding: 0.45rem 1rem;
+            border: 2px solid rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border-radius: 0.6rem;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .notification-banner .btn-dismiss-notif:hover { background: rgba(255,255,255,0.3); }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Progress Tracker (Feature 3) ── */
+        .progress-tracker-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 1.25rem;
+            padding: 2rem 2.5rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        .progress-tracker-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .progress-steps {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: relative;
+        }
+        /* Connecting line behind the steps */
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 30px;
+            right: 30px;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            z-index: 0;
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.65rem;
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+        .step-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            border: 3px solid #e5e7eb;
+            background: white;
+            color: #9ca3af;
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        .step-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #9ca3af;
+            text-align: center;
+            max-width: 110px;
+            line-height: 1.3;
+            transition: color 0.3s;
+        }
+
+        /* Step states */
+        .step-completed .step-circle {
+            background: linear-gradient(135deg, #138808, #16a34a);
+            border-color: #138808;
+            color: white;
+            box-shadow: 0 4px 14px rgba(19, 136, 8, 0.3);
+        }
+        .step-completed .step-label { color: #138808; }
+
+        .step-current .step-circle {
+            background: linear-gradient(135deg, #FF9933, #f59e0b);
+            border-color: #FF9933;
+            color: white;
+            box-shadow: 0 4px 14px rgba(255, 153, 51, 0.4);
+            animation: pulse 2s infinite;
+        }
+        .step-current .step-label { color: #FF9933; font-weight: 700; }
+
+        .step-future .step-circle {
+            background: white;
+            border-color: #e5e7eb;
+            color: #d1d5db;
+        }
+        .step-future .step-label { color: #d1d5db; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 14px rgba(255, 153, 51, 0.4); }
+            50%      { box-shadow: 0 4px 24px rgba(255, 153, 51, 0.65); }
+        }
+
+        /* Filled line segment for completed steps */
+        .progress-line-fill {
+            position: absolute;
+            top: 22px;
+            left: 30px;
+            height: 4px;
+            background: linear-gradient(90deg, #138808, #16a34a);
+            border-radius: 2px;
+            z-index: 0;
+            transition: width 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+    </style>
 </head>
 <body>
     <div id="app-container" class="app-container">
         <!-- Sidebar injected via JS -->
         <main class="main-content">
             <h1 class="page-title" id="welcome-message">Welcome, User</h1>
+
+            <!-- Notification Banner (Feature 4) -->
+            <div class="notification-banner" id="status-notification">
+                <span class="banner-icon">🎉</span>
+                <span class="banner-msg">Your application status has been updated!</span>
+                <button class="btn-dismiss-notif" id="btn-dismiss-notif">Dismiss</button>
+            </div>
             
             <div class="metrics-grid">
                 <!-- Card 1: Status -->
@@ -31,13 +192,31 @@
                     </div>
                     <div class="card-value" id="officer-name" style="font-size: 1.5rem; margin-top: 0.5rem; color: var(--navy);">Loading...</div>
                 </div>
+            </div>
 
-                <!-- Card 3: Current Stage -->
-                <div class="card" id="card-stage">
-                    <div class="card-title">
-                        <i data-lucide="construction"></i> Project Stage
+            <!-- Progress Tracker (Feature 3) -->
+            <div class="progress-tracker-card">
+                <div class="progress-tracker-title">
+                    <i data-lucide="git-branch" style="width:16px;height:16px;"></i> Application Progress
+                </div>
+                <div class="progress-steps" id="progress-steps">
+                    <div class="progress-line-fill" id="progress-line-fill"></div>
+                    <div class="progress-step" data-step="0">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Registered</div>
                     </div>
-                    <div class="card-value" id="project-stage" style="font-size: 1.5rem; margin-top: 0.5rem;">Loading...</div>
+                    <div class="progress-step" data-step="1">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Pending Review</div>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Under Construction</div>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Completed</div>
+                    </div>
                 </div>
             </div>
         </main>

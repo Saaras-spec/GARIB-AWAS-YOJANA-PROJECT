@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Export libraries (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         .banner {
             background-color: var(--card-bg);
@@ -56,6 +60,91 @@
         .td-name { font-weight: 500; }
         .td-address { color: var(--text-secondary); }
         .td-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+        /* ── Filter Toolbar ── */
+        .filter-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .filter-toolbar input[type="text"] {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: rgba(255,255,255,0.6);
+            color: var(--text-primary);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .filter-toolbar input[type="text"]:focus {
+            outline: none;
+            border-color: var(--saffron);
+            box-shadow: 0 0 0 3px rgba(255,153,51,0.15);
+        }
+        .filter-toolbar select {
+            padding: 0.7rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: rgba(255,255,255,0.6);
+            color: var(--text-primary);
+            cursor: pointer;
+            min-width: 150px;
+            transition: border-color 0.2s;
+        }
+        .filter-toolbar select:focus {
+            outline: none;
+            border-color: var(--saffron);
+        }
+
+        /* ── Export Buttons ── */
+        .export-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1.25rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+        .btn-export:hover {
+            transform: translateY(-1px);
+        }
+        .btn-export:active {
+            transform: scale(0.97);
+        }
+        .btn-export-pdf {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(220,38,38,0.25);
+        }
+        .btn-export-excel {
+            background: linear-gradient(135deg, #138808 0%, #16a34a 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(19,136,8,0.25);
+        }
     </style>
 </head>
 <body>
@@ -69,6 +158,35 @@
                     <button id="btn-undo" class="btn-undo">Undo Action</button>
                     <button id="btn-restore-all" class="btn-restore" style="display: none;">Restore All</button>
                     <button id="btn-dismiss" class="btn-dismiss">Dismiss</button>
+                </div>
+            </div>
+
+            <!-- Filter Toolbar (Feature 1) + Export Buttons (Feature 2) -->
+            <div class="filter-toolbar">
+                <input type="text" id="filter-search" placeholder="🔍 Search by name…" autocomplete="off">
+                <select id="filter-status">
+                    <option value="">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Under Construction">Under Construction</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <select id="filter-district">
+                    <option value="">All Districts</option>
+                    <!-- Populated dynamically -->
+                </select>
+                <select id="filter-income">
+                    <option value="">All Incomes</option>
+                    <option value="0-50000">₹0 – ₹50,000</option>
+                    <option value="50000-100000">₹50,000 – ₹1,00,000</option>
+                    <option value="100000+">₹1,00,000+</option>
+                </select>
+                <div class="export-actions">
+                    <button class="btn-export btn-export-pdf" id="btn-export-pdf">
+                        <i data-lucide="file-text" style="width:16px;height:16px;"></i> Export PDF
+                    </button>
+                    <button class="btn-export btn-export-excel" id="btn-export-excel">
+                        <i data-lucide="table" style="width:16px;height:16px;"></i> Export Excel
+                    </button>
                 </div>
             </div>
 
