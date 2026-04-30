@@ -1,197 +1,170 @@
-# 🏠 Garib Awas Yojana — Management Information System
+# 🏠 Garib Awas Yojana — Rural Housing MIS
 
-A full-stack web application for managing India's rural housing scheme (**Garib Awas Yojana**). The platform enables government officers to register, track, and manage housing beneficiaries while providing beneficiaries with a personal dashboard to view their application status, assigned officer, and project progress.
+[![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
+[![Express Version](https://img.shields.io/badge/Express-v5-blue.svg)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Latest-brightgreen.svg)](https://www.mongodb.com/)
+[![License](https://img.shields.io/badge/License-Educational-orange.svg)](LICENSE)
 
----
-
-## ✨ Features
-
-### 👮 Officer Portal
-- **Dashboard** — Real-time statistics: total enrolled, pending, under construction, and completed housing projects.
-- **Beneficiary Registration** — Register new beneficiaries with name, age, family members, income, address, and geo-coordinates.
-- **Beneficiary Management** — View, update status (`Pending` → `Under Construction` → `Completed`), and delete beneficiary records.
-- **Interactive Map** — Leaflet-powered map with color-coded markers (🔴 Pending, 🟡 Under Construction, 🟢 Completed) showing beneficiary locations.
-
-### 👤 User (Beneficiary) Portal
-- **Personal Dashboard** — View application status, assigned officer name, and current project stage.
-- **Details Page** — Full beneficiary profile with all registered information.
-- **Location Map** — Personal map view showing the beneficiary's housing location.
-
-### 🔐 Authentication & Security
-- **Role-based access** — Separate login flows for Officers (email + password) and Users (name-based).
-- **JWT authentication** — Secure token-based sessions with 24-hour expiry.
-- **Password hashing** — Officer passwords hashed with bcryptjs.
-- **Protected API routes** — Middleware-enforced authorization; officer-only endpoints for CRUD operations.
+A state-of-the-art **Management Information System (MIS)** designed to streamline the administration of India's rural housing initiative, **Garib Awas Yojana**. This platform bridges the gap between government administration and citizens, ensuring transparency, real-time tracking, and efficient resource allocation.
 
 ---
 
-## 🛠️ Tech Stack
-
-| Layer        | Technology                                                  |
-| ------------ | ----------------------------------------------------------- |
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript, Lucide Icons, Leaflet.js   |
-| **Backend**  | Node.js, Express.js (v5)                                    |
-| **Database** | MongoDB (via Mongoose ODM), with optional in-memory fallback|
-| **Auth**     | JSON Web Tokens (JWT), bcryptjs                             |
-| **Others**   | dotenv, CORS                                                |
+## 📖 Table of Contents
+- [Project Overview](#-project-overview)
+- [Key Features](#-key-features)
+- [Technical Architecture](#-technical-architecture)
+- [Database Schema](#-database-schema)
+- [API Documentation](#-api-documentation)
+- [Installation & Setup](#-installation--setup)
+- [Future Enhancements](#-future-enhancements)
+- [Author](#-author)
 
 ---
 
-## 📁 Project Structure
+## 🎯 Project Overview
 
-```
-GARIB-AWAS-YOJANA-PROJECT/
-│
-├── backend/                          # Server-side application
-│   ├── controllers/
-│   │   ├── authController.js         # Signup & login logic (Officer + User)
-│   │   └── beneficiaryController.js  # CRUD operations for beneficiaries
-│   │
-│   ├── middleware/
-│   │   └── verifyAuth.js             # JWT verification & officer-only guard
-│   │
-│   ├── models/
-│   │   ├── Beneficiary.js            # Beneficiary schema (GeoJSON location)
-│   │   └── Officer.js                # Officer schema
-│   │
-│   ├── routes/
-│   │   ├── api.js                    # Protected beneficiary & statistics routes
-│   │   └── authRoutes.js             # Auth routes (signup, login)
-│   │
-│   ├── server.js                     # Express server entry point
-│   ├── package.json                  # Backend dependencies
-│   └── package-lock.json
-│
-├── frontend/                         # Client-side application
-│   ├── css/
-│   │   ├── auth.css                  # Authentication page styles
-│   │   └── style.css                 # Global application styles
-│   │
-│   ├── js/
-│   │   ├── auth.js                   # Token management & auth helpers
-│   │   ├── dashboard.js              # Officer dashboard statistics
-│   │   ├── manage.js                 # Beneficiary table management
-│   │   ├── map.js                    # Officer map (all beneficiaries)
-│   │   ├── register.js               # Beneficiary registration form
-│   │   ├── sidebar.js                # Dynamic sidebar injection
-│   │   ├── user-dashboard.js         # User dashboard data fetch
-│   │   ├── user-details.js           # User details page logic
-│   │   └── user-map.js               # User personal map view
-│   │
-│   ├── officer/                      # Officer pages
-│   │   ├── index.html                # Officer dashboard
-│   │   ├── manage.html               # Manage beneficiaries
-│   │   ├── map.html                  # Map view
-│   │   └── register.html             # Register beneficiary
-│   │
-│   ├── user/                         # Beneficiary (User) pages
-│   │   ├── index.html                # User dashboard
-│   │   ├── details.html              # User details
-│   │   └── map.html                  # User map view
-│   │
-│   ├── login.html                    # Login page (Officer & User toggle)
-│   └── signup.html                   # Officer registration page
-│
-├── .gitignore
-├── package.json                      # Root package (install & start scripts)
-└── README.md
+The **Garib Awas Yojana MIS** is a full-stack solution built to solve the challenges of tracking rural housing projects. Traditionally, managing thousands of housing applications manually leads to delays and data inconsistencies. This platform provides:
+- **For Officers**: A command center to register beneficiaries, monitor project stages via maps, and generate reports.
+- **For Beneficiaries**: A simple, accessible portal to check their application status without visiting government offices.
+
+---
+
+## ✨ Key Features
+
+### 👮 Officer Command Center
+- **Dynamic Dashboard**: Real-time visualization of project distribution (Pending vs. Completed).
+- **Geospatial Tracking**: Integrated **Leaflet.js** map showing every project site with status-based color coding.
+  - 🔴 **Pending**: Initial registration phase.
+  - 🟡 **Under Construction**: Foundation or structure in progress.
+  - 🟢 **Completed**: House handed over to the beneficiary.
+- **Advanced Management**: Search, filter by district/income, and update project status with a single click.
+- **Export Capabilities**: Generate professional PDF reports and Excel sheets for offline auditing.
+
+### 👤 Beneficiary Portal
+- **Zero-Password Login**: Simple name-based authentication for ease of use in rural areas.
+- **Personalized Tracking**: Real-time view of their house's construction stage.
+- **Officer Connectivity**: Transparent information about the assigned officer in charge of their project.
+
+### 🛡️ Security & Reliability
+- **JWT-Based Authentication**: Secure, stateless sessions for both officers and users.
+- **Role-Based Access Control (RBAC)**: Strict separation of duties ensuring only authorized officers can modify data.
+- **In-Memory Fallback**: Seamless development experience with automatic `mongodb-memory-server` activation if no database URI is provided.
+
+---
+
+## 🛠️ Technical Architecture
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Frontend** | Vanilla JS / CSS3 | High performance, no-build-step architecture. |
+| **Backend** | Node.js / Express 5 | Modern, asynchronous request handling. |
+| **Database** | MongoDB / Mongoose | Flexible document storage for complex beneficiary data. |
+| **Mapping** | Leaflet.js / CARTO | Geospatial visualization of housing projects. |
+| **Icons** | Lucide Icons | Clean, lightweight SVG iconography. |
+
+---
+
+## 🗃️ Database Schema
+
+### 📋 Beneficiary Model
+The heart of the application, utilizing **GeoJSON** for location tracking.
+```javascript
+{
+  name: String,          // Lowercase for search optimization
+  age: Number,
+  income: Number,        // Annual income for eligibility tracking
+  address: String,
+  status: String,        // ["Pending", "Under Construction", "Completed"]
+  location: {
+    type: "Point",
+    coordinates: [lng, lat]
+  },
+  officerId: ObjectId    // Reference to the managing officer
+}
 ```
 
+### 📋 Officer Model
+Handles administrative access and district-wise grouping.
+```javascript
+{
+  name: String,
+  email: String,         // Unique identifier
+  password: String,      // Hashed with bcryptjs
+  district: String,
+  state: String,
+  role: "officer"
+}
+```
+
 ---
 
-## 🚀 Getting Started
+## 📡 API Documentation
+
+### 🔑 Authentication
+- `POST /api/auth/signup` - Register a new administrative officer.
+- `POST /api/auth/login` - Unified login for both officers and beneficiaries.
+
+### 🏠 Beneficiary Operations (Officer Only)
+- `GET /api/beneficiaries` - Fetch all beneficiaries assigned to the logged-in officer.
+- `POST /api/beneficiaries` - Onboard a new citizen into the scheme.
+- `PUT /api/beneficiaries/:id/status` - Transition a project through construction stages.
+- `DELETE /api/beneficiaries/:id` - Remove a record (with soft-delete/undo support in UI).
+
+### 📊 Analytics & Profile
+- `GET /api/statistics` - Aggregate counts for dashboard charts.
+- `GET /api/user/me` - Profile retrieval for the logged-in beneficiary.
+
+---
+
+## 🚀 Installation & Setup
 
 ### Prerequisites
+- Node.js (v18.x or v20.x recommended)
+- MongoDB (Optional, will use in-memory DB if not provided)
 
-- [Node.js](https://nodejs.org/) (v18 or higher)
-- [MongoDB](https://www.mongodb.com/) (local or Atlas cloud instance)
+### Step-by-Step Installation
 
-### Installation
-
-1. **Clone the repository**
+1. **Clone the Repo**
    ```bash
    git clone https://github.com/Saaras-spec/GARIB-AWAS-YOJANA-PROJECT.git
    cd GARIB-AWAS-YOJANA-PROJECT
    ```
 
-2. **Install all dependencies**
+2. **Install Dependencies**
+   The project uses a root-level script to install both frontend and backend requirements.
    ```bash
    npm run install-all
    ```
 
-3. **Configure environment variables**
-
-   Create a `.env` file inside the `backend/` directory:
+3. **Environment Configuration**
+   Create `backend/.env`:
    ```env
-   MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/garib-awas
-   JWT_SECRET=your_jwt_secret_key
    PORT=5001
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your_super_secret_key_2026
    ```
-   > **Note:** If no `MONGODB_URI` is provided, the server will automatically spin up an in-memory MongoDB instance for local development.
 
-4. **Start the server**
+4. **Run Application**
    ```bash
    npm start
    ```
-   The app will be available at **http://localhost:5001**
+   Access the portal at `http://localhost:5001`.
 
 ---
 
-## 📡 API Endpoints
-
-### Authentication
-| Method | Endpoint            | Description              | Access  |
-| ------ | ------------------- | ------------------------ | ------- |
-| POST   | `/api/auth/signup`  | Register a new officer   | Public  |
-| POST   | `/api/auth/login`   | Login (Officer or User)  | Public  |
-
-### Beneficiary Management
-| Method | Endpoint                        | Description                  | Access       |
-| ------ | ------------------------------- | ---------------------------- | ------------ |
-| GET    | `/api/beneficiaries`            | List all beneficiaries       | Officer only |
-| POST   | `/api/beneficiaries`            | Register new beneficiary     | Officer only |
-| PUT    | `/api/beneficiaries/:id/status` | Update beneficiary status    | Officer only |
-| DELETE | `/api/beneficiaries/:id`        | Remove a beneficiary         | Officer only |
-| GET    | `/api/statistics`               | Dashboard statistics         | Officer only |
-| GET    | `/api/user/me`                  | Get logged-in user's data    | Authenticated|
-
----
-
-## 🗃️ Database Models
-
-### Officer
-| Field      | Type   | Description              |
-| ---------- | ------ | ------------------------ |
-| name       | String | Officer's full name      |
-| phone      | String | Contact number           |
-| email      | String | Unique email (lowercase) |
-| district   | String | Assigned district        |
-| state      | String | State                    |
-| password   | String | Hashed password          |
-| role       | String | Always `"officer"`       |
-| createdAt  | Date   | Registration timestamp   |
-
-### Beneficiary
-| Field         | Type     | Description                              |
-| ------------- | -------- | ---------------------------------------- |
-| name          | String   | Beneficiary name (lowercase)             |
-| age           | Number   | Age                                      |
-| familyMembers | Number   | Number of family members                 |
-| income        | Number   | Annual income                            |
-| address       | String   | Residential address                      |
-| status        | String   | `Pending` / `Under Construction` / `Completed` |
-| location      | GeoJSON  | Point coordinates `[lng, lat]`           |
-| officerId     | ObjectId | Reference to the assigned Officer        |
-| createdAt     | Date     | Registration timestamp                   |
-
----
-
-## 📜 License
-
-This project is for educational purposes.
+## 🔮 Future Enhancements
+- [ ] **Document Upload**: Allow beneficiaries to upload ID proofs directly via the portal.
+- [ ] **SMS Notifications**: Automated SMS alerts when a house transitions to "Completed" status.
+- [ ] **Offline Mode**: Progressive Web App (PWA) support for officers in remote areas with poor connectivity.
+- [ ] **AI Eligibility Check**: Automatic verification of income vs. family size for scheme eligibility.
 
 ---
 
 ## 👨‍💻 Author
 
-**Saaras** — [GitHub](https://github.com/Saaras-spec)
+**Saaras**
+- 🌟 [GitHub Profile](https://github.com/Saaras-spec)
+- 📧 [Contact](mailto:your-email@example.com)
+
+---
+*Created for the Advance Web Development Project (Semester 4).*
