@@ -15,19 +15,20 @@ A high-performance, full-stack **Management Information System (MIS)** developed
 2.  [Project Structure](#-project-structure)
 3.  [Core Functionalities](#-core-functionalities)
 4.  [User Personas & Target Audience](#-user-personas--target-audience)
-5.  [Technical Architecture](#-technical-architecture)
-6.  [Business Logic & Workflows](#-business-logic--workflows)
-7.  [Detailed API Documentation](#-detailed-api-documentation)
-8.  [Database Schema Deep-Dive](#-database-schema-deep-dive)
-9.  [Frontend Design System](#-frontend-design-system)
-10. [Frontend Component Logic](#-frontend-component-logic)
-11. [Security & Middleware](#-security--middleware)
-12. [Error Handling & API Responses](#-error-handling--api-responses)
-13. [Installation & Setup](#-installation--setup)
-14. [Development Roadmap](#-development-roadmap)
-15. [Troubleshooting & FAQ](#-troubleshooting--faq)
-16. [Future Enhancements](#-future-enhancements)
-17. [Author](#-author)
+5.  [Feature Comparison: Officer vs Beneficiary](#-feature-comparison-officer-vs-beneficiary)
+6.  [Technical Architecture](#-technical-architecture)
+7.  [Business Logic & Workflows](#-business-logic--workflows)
+8.  [Detailed API Documentation](#-detailed-api-documentation)
+9.  [Database Schema Deep-Dive](#-database-schema-deep-dive)
+10. [Frontend Design System](#-frontend-design-system)
+11. [Frontend Component Breakdown](#-frontend-component-breakdown)
+12. [Security & Middleware](#-security--middleware)
+13. [Error Handling & API Responses](#-error-handling--api-responses)
+14. [Installation & Setup](#-installation--setup)
+15. [Development Roadmap](#-development-roadmap)
+16. [Troubleshooting & FAQ](#-troubleshooting--faq)
+17. [Future Enhancements](#-future-enhancements)
+18. [Author](#-author)
 
 ---
 
@@ -119,6 +120,21 @@ GARIB-AWAS-YOJANA-PROJECT/
 - **Goals**: Check the status of their application and know when they can move into their new home.
 - **Pain Points**: Lack of information and need to travel to district offices for updates.
 - **Solution**: A mobile-friendly personal portal accessible via a simple name-based login.
+
+---
+
+## 📊 Feature Comparison: Officer vs Beneficiary
+
+| Feature | Officer Portal | Beneficiary Portal |
+| :--- | :---: | :---: |
+| **View Dashboard Stats** | ✅ Full District Stats | ✅ Personal Status Only |
+| **Register New Members** | ✅ Yes | ❌ No |
+| **Update Project Status** | ✅ Yes | ❌ No |
+| **Global Map View** | ✅ All Projects | ❌ No |
+| **Personal Map View** | ✅ Yes | ✅ Yes |
+| **Delete Records** | ✅ Yes (with Undo) | ❌ No |
+| **Export PDF/Excel** | ✅ Yes | ❌ No |
+| **Login Method** | Email + Password | Name + Name (Pwd) |
 
 ---
 
@@ -228,6 +244,28 @@ Core record storage utilizing **MongoDB 2dsphere indexes** for location tracking
 ### **Typography**
 - **Headings**: `Outfit`, sans-serif - Modern and professional.
 - **Body**: `Inter`, sans-serif - Optimized for high legibility.
+
+---
+
+## 🧩 Frontend Component Breakdown
+
+### **1. Navigation & Layout**
+- `sidebar.js`: Dynamically injects the sidebar into every page. It checks the user's role (Officer/User) to show appropriate links and highlights the active page based on the current URL.
+
+### **2. Authentication Engine**
+- `auth.js`: The central security hub for the frontend. It provides:
+  - `getToken()`: Retrieves the JWT from `localStorage`.
+  - `requireRole(role)`: Protects pages from unauthorized access by redirecting users if their role doesn't match.
+  - `logout()`: Clears the session and redirects to the login page.
+
+### **3. Records Engine**
+- `manage.js`: A complex module handling the beneficiary table. It includes:
+  - **Live Filtering**: Uses `.filter()` on the cached data for instant search results.
+  - **Export Logic**: Integrates `jsPDF` and `XLSX` to process data into downloadable formats.
+  - **Undo Banner**: Maintains a local state of `deletedRecords` for the restoration feature.
+
+### **4. Geospatial Engine**
+- `map.js`: Initializes the Leaflet map, fetches beneficiary coordinates, and creates custom HTML popups with dynamic status badges.
 
 ---
 
