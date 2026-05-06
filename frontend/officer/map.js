@@ -8,14 +8,16 @@ document.addEventListener("DOMContentLoaded", () => {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
     }).addTo(map);
 
-    fetch('/api/beneficiaries', { headers: authHeaders() })
+    fetch('/api/beneficiaries?limit=1000', { headers: authHeaders() })
         .then(res => {
             if (res.status === 401 || res.status === 403) { logout(); return; }
             return res.json();
         })
         .then(data => {
             if (!data) return;
-            data.forEach(b => {
+            const beneficiaries = data.beneficiaries || data;
+            if (!Array.isArray(beneficiaries)) return;
+            beneficiaries.forEach(b => {
                 if (b.location && b.location.coordinates) {
                     const lat = b.location.coordinates[1];
                     const lon = b.location.coordinates[0];

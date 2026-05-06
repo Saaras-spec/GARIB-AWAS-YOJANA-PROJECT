@@ -145,6 +145,22 @@
             color: white;
             box-shadow: 0 4px 12px rgba(19,136,8,0.25);
         }
+
+        /* ── Modal Styles ── */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-content {
+            background: white; padding: 2.5rem; border-radius: 1.5rem;
+            width: 100%; max-width: 450px; box-shadow: var(--shadow-lg);
+        }
+        .page-btn { padding: 0.5rem 1rem; background: white; border: 1px solid var(--border-color); border-radius: 0.5rem; cursor: pointer; font-weight: 600; color: var(--navy); }
+        .page-btn.active { background: var(--saffron); color: white; border-color: var(--saffron); }
+        .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .page-info { font-size: 0.9rem; color: var(--text-secondary); margin-left: 1rem; }
     </style>
 </head>
 <body>
@@ -202,6 +218,24 @@
                     </thead>
                     <tbody id="records-body"></tbody>
                 </table>
+            </div>
+            
+            <div id="pagination-container" class="pagination-container" style="display:flex; gap:0.5rem; justify-content:center; align-items:center; margin-top:2rem;"></div>
+            
+            <!-- Expected Completion Date Modal -->
+            <div id="date-modal" class="modal-overlay">
+                <div class="modal-content">
+                    <h3 style="margin-bottom: 1rem; color: var(--navy); font-size: 1.25rem;">Start Construction</h3>
+                    <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Please select the expected completion date for this beneficiary's house.</p>
+                    <div class="form-group">
+                        <label class="form-label">Expected Completion Date</label>
+                        <input type="date" id="expected-date-input" class="form-input" required>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button id="modal-cancel" class="btn-move" style="flex: 1; padding: 0.75rem;">Cancel</button>
+                        <button id="modal-confirm" class="btn-start" style="flex: 1; padding: 0.75rem; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600;">Confirm Start</button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
