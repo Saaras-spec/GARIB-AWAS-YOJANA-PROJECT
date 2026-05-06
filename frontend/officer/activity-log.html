@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Log - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .log-toolbar { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .log-toolbar input { flex: 1; padding: 0.75rem 1rem; border: 1px solid var(--border-color); border-radius: 0.75rem; font-size: 0.95rem; font-family: inherit; background: rgba(255,255,255,0.6); }
+        .log-toolbar input:focus { outline: none; border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,153,51,0.15); }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: rgba(249,250,251,0.5); border-bottom: 1px solid var(--border-color); }
+        th { padding: 1rem 1.25rem; font-weight: 600; color: var(--navy); text-align: left; font-size: 0.9rem; }
+        td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        .status-badge { padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+        .status-completed { background: rgba(19,136,8,0.1); color: var(--green); }
+        .status-pending { background: rgba(255,153,51,0.1); color: var(--saffron); }
+        .status-construction { background: rgba(0,0,128,0.1); color: var(--navy); }
+    </style>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <main class="main-content">
+            <h1 class="page-title">Activity Log</h1>
+            <div class="log-toolbar">
+                <input type="text" id="log-search" placeholder="🔍 Search by beneficiary name..." autocomplete="off">
+            </div>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Beneficiary Name</th>
+                            <th>Old Status</th>
+                            <th>New Status</th>
+                            <th>Changed By</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-body"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="./activity-log.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

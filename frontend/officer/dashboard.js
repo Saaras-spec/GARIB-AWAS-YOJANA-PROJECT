@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
     if (!requireRole('officer')) return;
 
+    // ── Helper: format date to Indian format ──
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
     // ── Fetch statistics and populate cards ──
     fetch('/api/statistics', { headers: authHeaders() })
         .then(res => {
@@ -14,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById('stats-underConstruction').textContent = data.underConstruction || 0;
             document.getElementById('stats-completed').textContent = data.completed || 0;
 
-            // ── Doughnut Chart — Status Distribution (Feature 7) ──
+            // ── Doughnut Chart — Status Distribution ──
             renderStatusChart(data);
         })
         .catch(err => console.error('Error fetching stats:', err));
@@ -26,10 +32,67 @@ document.addEventListener("DOMContentLoaded", async () => {
             return res.json();
         })
         .then(data => {
-            if (!data || !Array.isArray(data)) return;
-            renderRegistrationChart(data);
+            if (!data) return;
+            // Handle paginated response
+            const beneficiaries = data.beneficiaries || data;
+            if (!Array.isArray(beneficiaries)) return;
+            renderRegistrationChart(beneficiaries);
         })
         .catch(err => console.error('Error fetching beneficiaries for chart:', err));
+
+    // ── Feature 7: Fetch average satisfaction rating ──
+    fetch('/api/ratings/average', { headers: authHeaders() })
+        .then(res => res.json())
+        .then(data => {
+            if (!data) return;
+            document.getElementById('avg-rating-value').textContent = `⭐ ${data.average || 0}`;
+            document.getElementById('rating-count').textContent = `${data.totalRatings || 0} ratings received`;
+        })
+        .catch(err => console.error('Error fetching ratings:', err));
+
+    // ── Feature 4: Bell Notification ──
+    const bellWrapper = document.getElementById('bell-wrapper');
+    const bellBadge = document.getElementById('bell-badge');
+    const bellDropdown = document.getElementById('bell-dropdown');
+    const bellDropdownBody = document.getElementById('bell-dropdown-body');
+
+    // Fetch unread count
+    fetch('/api/notifications/unread-count', { headers: authHeaders() })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.count > 0) {
+                bellBadge.textContent = data.count > 99 ? '99+' : data.count;
+                bellBadge.style.display = 'flex';
+            }
+        })
+        .catch(err => console.error('Error fetching notification count:', err));
+
+    // Fetch recent notifications for dropdown
+    fetch('/api/notifications', { headers: authHeaders() })
+        .then(res => res.json())
+        .then(notifications => {
+            if (!notifications || notifications.length === 0) {
+                bellDropdownBody.innerHTML = '<div class="bell-dropdown-empty">No notifications</div>';
+                return;
+            }
+            const recent = notifications.slice(0, 5);
+            bellDropdownBody.innerHTML = recent.map(n => `
+                <div class="bell-dropdown-item">
+                    <div>${n.message}</div>
+                    <div class="notif-time">${formatDate(n.createdAt)}</div>
+                </div>
+            `).join('');
+        })
+        .catch(err => console.error('Error fetching notifications:', err));
+
+    // Toggle bell dropdown
+    bellWrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        bellDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', () => {
+        bellDropdown.classList.remove('open');
+    });
 
     // ── Doughnut Chart Renderer ──
     function renderStatusChart(stats) {

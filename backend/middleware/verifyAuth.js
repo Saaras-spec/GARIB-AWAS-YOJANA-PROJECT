@@ -34,4 +34,13 @@ const officerOnly = (req, res, next) => {
     }
 };
 
-module.exports = { verifyToken, officerOnly };
+// Middleware: Restrict to Users only
+const userOnly = (req, res, next) => {
+    if (req.user && req.user.role === 'user') {
+        next();
+    } else {
+        return res.status(403).json({ error: 'Access denied. Users only.' });
+    }
+};
+
+module.exports = { verifyToken, officerOnly, userOnly };

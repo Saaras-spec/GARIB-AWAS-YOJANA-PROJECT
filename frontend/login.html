@@ -4,83 +4,137 @@
     <meta charset="UTF-8">
     <link rel="icon" href="data:,">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - Garib Awas Yojana MIS</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/auth.css">
+    <meta name="description" content="Sign in to Garib Awas Yojana Management Information System - Government housing portal for officers and beneficiaries.">
+    <title>Sign In — Garib Awas Yojana MIS</title>
+    <link rel="stylesheet" href="/css/login.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="auth-body">
-    <div class="auth-wrapper">
-        <!-- Branding -->
-        <div class="auth-brand">
-            <div class="brand-icon">
-                <i data-lucide="home" style="width:32px;height:32px;color:#fff;"></i>
+<body class="login-page">
+
+    <div class="login-container">
+        <!-- ═══ LEFT: Hero Visual Panel ═══ -->
+        <div class="login-hero">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i data-lucide="landmark" style="width:13px;height:13px;"></i>
+                    Government of India Initiative
+                </div>
+                <h1>Garib Awas<br><span>Yojana</span></h1>
+                <p class="hero-tagline">Empowering every family with a home — building a stronger, self-reliant India, one house at a time.</p>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="stat-value">2.5 Cr+</span>
+                        <span class="stat-label">Homes Built</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-value">35</span>
+                        <span class="stat-label">States & UTs</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="stat-value">100%</span>
+                        <span class="stat-label">Transparency</span>
+                    </div>
+                </div>
             </div>
-            <h1>Garib Awas Yojana</h1>
-            <p>Management Information System</p>
+
+            <div class="flag-stripe"></div>
         </div>
 
-        <!-- Login Card -->
-        <div class="auth-card">
-            <h2 class="auth-title">Welcome Back</h2>
-            <p class="auth-subtitle">Sign in to continue to your dashboard</p>
-
-            <!-- Toggle -->
-            <div class="login-toggle">
-                <button class="toggle-btn active" id="toggle-officer" onclick="setLoginType('officer')">
-                    <i data-lucide="shield" style="width:16px;height:16px;"></i> Officer
-                </button>
-                <button class="toggle-btn" id="toggle-user" onclick="setLoginType('user')">
-                    <i data-lucide="user" style="width:16px;height:16px;"></i> User
-                </button>
-            </div>
-
-            <!-- Error Message -->
-            <div id="error-msg" class="auth-error" style="display:none;"></div>
-
-            <!-- Form -->
-            <form id="login-form">
-                <!-- Officer: Email field -->
-                <div class="form-group" id="email-group">
-                    <label class="form-label">
-                        <i data-lucide="mail" style="width:16px;height:16px;"></i> Email Address
-                    </label>
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required />
-                </div>
-                <!-- User: Name field -->
-                <div class="form-group" id="name-group" style="display:none;">
-                    <label class="form-label">
-                        <i data-lucide="user" style="width:16px;height:16px;"></i> Name
-                    </label>
-                    <input type="text" id="name" class="form-input" placeholder="Enter your registered name" />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">
-                        <i data-lucide="lock" style="width:16px;height:16px;"></i> Password
-                    </label>
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required />
+        <!-- ═══ RIGHT: Login Form Panel ═══ -->
+        <div class="login-form-side">
+            <div class="form-wrapper">
+                <!-- Logo -->
+                <div class="login-logo">
+                    <div class="logo-icon">
+                        <i data-lucide="home" style="width:22px;height:22px;"></i>
+                    </div>
+                    <span>Garib Awas MIS</span>
                 </div>
 
-                <div id="user-hint" class="user-hint" style="display:none;">
-                    <i data-lucide="info" style="width:14px;height:14px;"></i>
-                    For user login, your password is the same as your registered name.
+                <!-- Header -->
+                <div class="form-header">
+                    <h2>Welcome back</h2>
+                    <p>Enter your credentials to access your dashboard</p>
                 </div>
 
-                <button type="submit" id="login-btn" class="btn-primary">
-                    <span id="btn-text">Sign In</span>
-                    <span id="btn-loader" class="btn-loader" style="display:none;"></span>
-                </button>
-            </form>
+                <!-- Role Toggle -->
+                <div class="role-toggle">
+                    <button type="button" class="role-btn active" id="toggle-officer" onclick="setLoginType('officer')">
+                        <i data-lucide="shield" style="width:15px;height:15px;"></i> Officer
+                    </button>
+                    <button type="button" class="role-btn" id="toggle-user" onclick="setLoginType('user')">
+                        <i data-lucide="user" style="width:15px;height:15px;"></i> Beneficiary
+                    </button>
+                </div>
 
-            <div class="auth-footer">
-                <p>Officer without an account? <a href="/signup">Sign Up Here</a></p>
+                <!-- Error Message -->
+                <div id="error-msg" class="login-error" style="display:none;">
+                    <i data-lucide="alert-circle" style="width:16px;height:16px;flex-shrink:0;"></i>
+                    <span id="error-text"></span>
+                </div>
+
+                <!-- Form -->
+                <form id="login-form" autocomplete="on">
+                    <!-- Officer: Email Field -->
+                    <div class="input-group" id="email-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-field">
+                            <span class="input-icon"><i data-lucide="mail" style="width:16px;height:16px;"></i></span>
+                            <input type="email" id="email" name="email" placeholder="officer@yojana.gov.in" autocomplete="email" required />
+                        </div>
+                    </div>
+
+                    <!-- User: Name Field -->
+                    <div class="input-group" id="name-group" style="display:none;">
+                        <label for="name">Registered Name</label>
+                        <div class="input-field">
+                            <span class="input-icon"><i data-lucide="user" style="width:16px;height:16px;"></i></span>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" autocomplete="name" />
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <div class="input-field">
+                            <span class="input-icon"><i data-lucide="lock" style="width:16px;height:16px;"></i></span>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+                            <button type="button" class="toggle-password" id="toggle-pw-btn" onclick="togglePasswordVisibility()" aria-label="Show password">
+                                <i data-lucide="eye" id="pw-icon-show" style="width:16px;height:16px;"></i>
+                                <i data-lucide="eye-off" id="pw-icon-hide" style="width:16px;height:16px;display:none;"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- User Hint -->
+                    <div id="user-hint" class="login-hint" style="display:none;">
+                        <i data-lucide="info" style="width:14px;height:14px;margin-top:2px;flex-shrink:0;"></i>
+                        <span>For beneficiary login, your password is the same as your registered name.</span>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" id="login-btn" class="login-btn">
+                        <span id="btn-text">Sign In</span>
+                        <span id="btn-loader" class="btn-spinner" style="display:none;"></span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="login-footer">
+                    <p>Officer without an account? <a href="/signup">Create Account</a></p>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ═══ Scripts ═══ -->
     <script src="/js/auth.js"></script>
     <script>
-        // If already logged in, redirect based on role
+        // ── Redirect if already logged in ──
         if (getToken()) {
             const user = getUser();
             if (user && user.role === 'officer') window.location.href = '/officer/';
@@ -89,6 +143,7 @@
 
         let currentLoginType = 'officer';
 
+        // ── Toggle Officer / User ──
         function setLoginType(type) {
             currentLoginType = type;
             document.getElementById('toggle-officer').classList.toggle('active', type === 'officer');
@@ -117,12 +172,30 @@
             lucide.createIcons();
         }
 
+        // ── Show/Hide Password ──
+        function togglePasswordVisibility() {
+            const pw = document.getElementById('password');
+            const show = document.getElementById('pw-icon-show');
+            const hide = document.getElementById('pw-icon-hide');
+            if (pw.type === 'password') {
+                pw.type = 'text';
+                show.style.display = 'none';
+                hide.style.display = 'block';
+            } else {
+                pw.type = 'password';
+                show.style.display = 'block';
+                hide.style.display = 'none';
+            }
+        }
+
+        // ── Form Submission ──
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const name = document.getElementById('name').value.trim();
             const password = document.getElementById('password').value;
             const errorMsg = document.getElementById('error-msg');
+            const errorText = document.getElementById('error-text');
             const btnText = document.getElementById('btn-text');
             const btnLoader = document.getElementById('btn-loader');
             const loginBtn = document.getElementById('login-btn');
@@ -149,11 +222,11 @@
                         window.location.href = '/user/';
                     }
                 } else {
-                    errorMsg.textContent = data.error || 'Login failed.';
+                    errorText.textContent = data.error || 'Login failed.';
                     errorMsg.style.display = 'flex';
                 }
             } catch (err) {
-                errorMsg.textContent = 'Could not connect to server.';
+                errorText.textContent = 'Could not connect to server.';
                 errorMsg.style.display = 'flex';
             } finally {
                 btnText.textContent = 'Sign In';
@@ -162,6 +235,7 @@
             }
         });
 
+        // Initialize icons
         lucide.createIcons();
     </script>
 </body>

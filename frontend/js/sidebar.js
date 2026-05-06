@@ -39,6 +39,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     Manage Records
                 </a>
             </li>
+            <li>
+                <a href="/officer/activity-log" class="nav-item ${window.location.pathname === '/officer/activity-log' || window.location.pathname === '/officer/activity-log.html' ? 'active' : ''}">
+                    <i data-lucide="clipboard-list"></i>
+                    Activity Log
+                </a>
+            </li>
+            <li>
+                <a href="/officer/announcements" class="nav-item ${window.location.pathname === '/officer/announcements' || window.location.pathname === '/officer/announcements.html' ? 'active' : ''}">
+                    <i data-lucide="megaphone"></i>
+                    Announcements
+                </a>
+            </li>
         `;
     } else {
         // Beneficiary (User) Sidebar
@@ -59,6 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="/user/map" class="nav-item ${window.location.pathname === '/user/map' || window.location.pathname === '/user/map.html' ? 'active' : ''}">
                     <i data-lucide="map-pin"></i>
                     GIS Map
+                </a>
+            </li>
+            <li>
+                <a href="/user/notifications" class="nav-item ${window.location.pathname === '/user/notifications' || window.location.pathname === '/user/notifications.html' ? 'active' : ''}">
+                    <i data-lucide="bell"></i>
+                    Notifications
+                </a>
+            </li>
+            <li>
+                <a href="/user/messages" class="nav-item ${window.location.pathname === '/user/messages' || window.location.pathname === '/user/messages.html' ? 'active' : ''}">
+                    <i data-lucide="message-circle"></i>
+                    Message Officer
                 </a>
             </li>
         `;

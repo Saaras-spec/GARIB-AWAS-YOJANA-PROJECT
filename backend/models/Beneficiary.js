@@ -15,6 +15,7 @@ const beneficiarySchema = new mongoose.Schema({
     type: { type: String, enum: ['Point'], required: true },
     coordinates: { type: [Number], required: true } // [longitude, latitude]
   },
+  expectedCompletionDate: { type: Date },
   officerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Officer'

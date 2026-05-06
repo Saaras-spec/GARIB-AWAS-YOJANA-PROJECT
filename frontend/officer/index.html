@@ -8,9 +8,94 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/auth.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Chart.js CDN (Feature 7) -->
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <style>
+        /* ── Notification Bell ── */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .bell-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+        .bell-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.2s;
+        }
+        .bell-icon:hover {
+            box-shadow: var(--shadow-md);
+        }
+        .bell-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+        .bell-dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 340px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            z-index: 100;
+        }
+        .bell-dropdown.open { display: block; }
+        .bell-dropdown-header {
+            padding: 1rem 1.25rem;
+            font-weight: 700;
+            color: var(--navy);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+        .bell-dropdown-item {
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            font-size: 0.88rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+        .bell-dropdown-item:last-child { border-bottom: none; }
+        .bell-dropdown-item .notif-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        .bell-dropdown-empty {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
         .charts-section {
             display: grid;
             grid-template-columns: 1fr 1.5fr;
@@ -62,12 +147,47 @@
         @media (max-width: 900px) {
             .charts-section { grid-template-columns: 1fr; }
         }
+
+        /* ── Satisfaction Card ── */
+        .card-satisfaction .card-value {
+            color: var(--saffron);
+            display: flex;
+            align-items: baseline;
+            gap: 0.35rem;
+        }
+        .card-satisfaction .rating-sub {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .card-satisfaction .rating-count {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-top: 0.35rem;
+        }
     </style>
 </head>
 <body>
     <div id="app-container" class="app-container">
         <!-- Sidebar injected via JS -->
         <main class="main-content">
+            <!-- Bell Notification Icon -->
+            <div class="top-bar">
+                <div class="bell-wrapper" id="bell-wrapper">
+                    <div class="bell-icon">
+                        <i data-lucide="bell" style="width:20px;height:20px;color:var(--navy);"></i>
+                    </div>
+                    <div class="bell-badge" id="bell-badge" style="display:none;">0</div>
+                    <div class="bell-dropdown" id="bell-dropdown">
+                        <div class="bell-dropdown-header">Recent Notifications</div>
+                        <div id="bell-dropdown-body">
+                            <div class="bell-dropdown-empty">No notifications</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <h1 class="page-title">Housing Scheme Overview</h1>
             <div class="metrics-grid">
                 <div class="card card-total">
@@ -97,9 +217,21 @@
                     </div>
                     <div class="card-value" id="stats-completed">0</div>
                 </div>
+
+                <!-- Feature 7: Average Satisfaction Rating -->
+                <div class="card card-satisfaction">
+                    <div class="card-title" style="color: var(--saffron);">
+                        <i data-lucide="star"></i> Average Satisfaction
+                    </div>
+                    <div class="card-value">
+                        <span id="avg-rating-value">⭐ 0</span>
+                        <span class="rating-sub">/ 5</span>
+                    </div>
+                    <div class="rating-count" id="rating-count">0 ratings received</div>
+                </div>
             </div>
 
-            <!-- Analytics Charts (Feature 7) -->
+            <!-- Analytics Charts -->
             <div class="charts-section">
                 <div class="chart-card">
                     <div class="chart-card-title">

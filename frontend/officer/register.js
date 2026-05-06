@@ -37,7 +37,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
             const dbRes = await fetch('/api/beneficiaries', { headers: authHeaders() });
             let serverRecords = [];
-            if (dbRes.ok) serverRecords = await dbRes.json();
+            if (dbRes.ok) {
+                const data = await dbRes.json();
+                serverRecords = data.beneficiaries || data;
+                if (!Array.isArray(serverRecords)) serverRecords = [];
+            }
 
             let localRecords = [];
             const stored = localStorage.getItem('beneficiaryHistory');
@@ -115,7 +119,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 1200);
     });
 
-    // 5. Form Submission
+    // 5. Feature 8: Dynamic Installment Fields
+    const installmentCountSelect = document.getElementById('installment-count');
+    const installmentFieldsContainer = document.getElementById('installment-fields');
+
+    const updateInstallmentFields = () => {
+        const count = parseInt(installmentCountSelect.value);
+        installmentFieldsContainer.innerHTML = '';
+        for (let i = 1; i <= count; i++) {
+            installmentFieldsContainer.innerHTML += `
+                <div class="installment-row">
+                    <label>Installment ${i} Amount:</label>
+                    <input type="number" class="form-input installment-amount" placeholder="₹ e.g. 40000" required />
+                </div>
+            `;
+        }
+    };
+
+    installmentCountSelect.addEventListener('change', updateInstallmentFields);
+
+    // 6. Form Submission
     const form = document.getElementById('registration-form');
     const submitBtn = document.getElementById('submit-btn');
 
@@ -131,6 +154,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         submitBtn.textContent = 'Registering...';
         document.getElementById('message-container').style.display = 'none';
 
+        // Collect installment data
+        const installmentAmounts = document.querySelectorAll('.installment-amount');
+        const installments = [];
+        installmentAmounts.forEach(input => {
+            if (input.value) {
+                installments.push({ amount: parseInt(input.value, 10) });
+            }
+        });
+
         const formData = {
             name: document.getElementById('name').value,
             age: parseInt(document.getElementById('age').value, 10),
@@ -138,7 +170,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             income: parseInt(document.getElementById('income').value, 10),
             address: document.getElementById('address').value,
             latitude: position[0],
-            longitude: position[1]
+            longitude: position[1],
+            installments: installments
         };
 
         try {
@@ -149,6 +182,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             if (res.status === 401 || res.status === 403) { logout(); return; }
+
+            const data = await res.json();
 
             if (res.ok) {
                 const localHistory = JSON.parse(localStorage.getItem('beneficiaryHistory') || '[]');
@@ -166,10 +201,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (currentMarker) map.removeLayer(currentMarker);
                 currentMarker = null;
                 document.getElementById('coordinates-info').style.display = 'none';
+                updateInstallmentFields();
                 
                 await loadHistory();
             } else {
-                showMessage('Failed to register beneficiary.', 'error');
+                // Feature 1: Show eligibility / backend error
+                showMessage(data.error || 'Failed to register beneficiary.', 'error');
             }
         } catch (error) {
             showMessage('An error occurred while connecting to the server.', 'error');

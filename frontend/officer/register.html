@@ -9,6 +9,41 @@
     <link rel="stylesheet" href="/css/auth.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .installment-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border-color);
+        }
+        .installment-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .installment-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .installment-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .installment-row label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            min-width: 140px;
+        }
+        .installment-row input {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
     <div id="app-container" class="app-container">
@@ -48,6 +83,33 @@
                         </div>
                         <div id="coordinates-info" style="margin-top: 0.75rem; font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; display: none;">
                             Coordinates Pinned: <strong style="color: var(--navy);" id="coordinates-text"></strong>
+                        </div>
+                    </div>
+
+                    <!-- Feature 8: Installment Details -->
+                    <div class="installment-section">
+                        <h3>💰 Installment Details</h3>
+                        <div class="form-group">
+                            <label class="form-label">Number of Installments</label>
+                            <select id="installment-count" class="form-select">
+                                <option value="1">1 Installment</option>
+                                <option value="2">2 Installments</option>
+                                <option value="3" selected>3 Installments</option>
+                            </select>
+                        </div>
+                        <div class="installment-fields" id="installment-fields">
+                            <div class="installment-row">
+                                <label>Installment 1 Amount:</label>
+                                <input type="number" class="form-input installment-amount" placeholder="₹ e.g. 40000" required />
+                            </div>
+                            <div class="installment-row">
+                                <label>Installment 2 Amount:</label>
+                                <input type="number" class="form-input installment-amount" placeholder="₹ e.g. 40000" required />
+                            </div>
+                            <div class="installment-row">
+                                <label>Installment 3 Amount:</label>
+                                <input type="number" class="form-input installment-amount" placeholder="₹ e.g. 40000" required />
+                            </div>
                         </div>
                     </div>
 

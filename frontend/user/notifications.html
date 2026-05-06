@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:,">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Garib Awas Yojana</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .notif-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .notif-item {
+            padding: 1.25rem 1.5rem; border-radius: 1rem; cursor: pointer;
+            border: 1px solid var(--border-color); transition: background 0.2s;
+        }
+        .notif-item.unread { background: rgba(255,153,51,0.08); border-left: 4px solid var(--saffron); }
+        .notif-item.read { background: white; }
+        .notif-item:hover { box-shadow: var(--shadow-sm); }
+        .notif-msg { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; line-height: 1.4; }
+        .notif-time { font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.35rem; }
+        .notif-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--saffron); margin-right: 0.5rem; }
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-secondary); }
+        .empty-state i { margin-bottom: 0.75rem; }
+    </style>
+</head>
+<body>
+    <div id="app-container" class="app-container">
+        <main class="main-content">
+            <h1 class="page-title">Notifications</h1>
+            <div class="notif-list" id="notif-list">
+                <p style="color:var(--text-secondary);">Loading...</p>
+            </div>
+        </main>
+    </div>
+    <script src="/js/auth.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="./notifications.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
