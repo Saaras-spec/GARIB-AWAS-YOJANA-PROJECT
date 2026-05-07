@@ -44,13 +44,18 @@ Below is the comprehensive directory structure of the project:
 GARIB-AWAS-YOJANA-PROJECT/
 ├── backend/                          # Server-side Application
 │   ├── controllers/                  # Business Logic Layer
+│   │   ├── announcementController.js # CRUD for Announcements
 │   │   ├── authController.js         # Authentication logic (Signup/Login)
-│   │   └── beneficiaryController.js  # CRUD logic for Beneficiary data
+│   │   ├── beneficiaryController.js  # CRUD logic for Beneficiary data
+│   │   └── messageController.js      # Chat & Messaging logic
 │   ├── middleware/                   # Request Interceptors
 │   │   └── verifyAuth.js             # JWT Verification & RBAC Guards
 │   ├── models/                       # Data Models (Mongoose Schemas)
+│   │   ├── Announcement.js           # Announcement Schema
 │   │   ├── Beneficiary.js            # Beneficiary Schema (GeoJSON)
-│   │   └── Officer.js                # Officer Schema (RBAC)
+│   │   ├── Message.js                # Chat Message Schema
+│   │   ├── Officer.js                # Officer Schema (RBAC)
+│   │   └── StatusLog.js              # Audit & Status Tracking Schema
 │   ├── routes/                       # Express Route Definitions
 │   │   ├── api.js                    # Protected Application Routes
 │   │   └── authRoutes.js             # Public Authentication Routes
@@ -62,25 +67,24 @@ GARIB-AWAS-YOJANA-PROJECT/
 │   ├── css/                          # Stylesheets
 │   │   ├── auth.css                  # Specific styles for Login/Signup
 │   │   └── style.css                 # Global Design System (Tokens & Variables)
-│   ├── js/                           # Frontend Logic (Modules)
+│   ├── js/                           # Global Frontend Logic
 │   │   ├── auth.js                   # Token & Session management
-│   │   ├── dashboard.js              # Stats fetching & rendering
-│   │   ├── manage.js                 # Table CRUD & PDF/Excel Export
-│   │   ├── map.js                    # Leaflet integration for Officers
-│   │   ├── register.js               # Form handling & Validation
-│   │   ├── sidebar.js                # Dynamic navigation rendering
-│   │   ├── user-dashboard.js         # Beneficiary-specific data
-│   │   ├── user-details.js           # Full profile view logic
-│   │   └── user-map.js               # Personal location map
-│   ├── officer/                      # Officer Pages
+│   │   └── sidebar.js                # Dynamic navigation rendering
+│   ├── officer/                      # Officer Pages & Scripts
+│   │   ├── activity-log.*            # Audit Log UI & Logic
+│   │   ├── announcements.*           # Notice Board UI & Logic
+│   │   ├── beneficiary-detail.*      # Detailed Record View UI & Logic
 │   │   ├── index.html                # Main Dashboard
-│   │   ├── manage.html               # Records Management
-│   │   ├── map.html                  # Geographical Overview
-│   │   └── register.html             # Beneficiary Registration
-│   ├── user/                         # Beneficiary (User) Pages
-│   │   ├── index.html                # Application Status Page
+│   │   ├── manage.*                  # Records Management
+│   │   ├── map.*                     # Geographical Overview
+│   │   └── register.*                # Beneficiary Registration
+│   ├── user/                         # Beneficiary (User) Pages & Scripts
 │   │   ├── details.html              # Full Profile
-│   │   └── map.html                  # Personal House Location
+│   │   ├── index.html                # Application Status Page
+│   │   ├── map.html                  # Personal House Location
+│   │   ├── messages.*                # User-Officer Chat Interface
+│   │   ├── notifications.*           # Status Alerts UI & Logic
+│   │   └── user-dashboard.js         # Beneficiary-specific data logic
 │   ├── login.html                    # Unified Login Portal
 │   └── signup.html                   # Officer Onboarding
 │
