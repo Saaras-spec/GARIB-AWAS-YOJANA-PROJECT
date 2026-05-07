@@ -180,9 +180,15 @@ We have recently integrated nine critical functional enhancements to scale the M
 - **Authorization**: Token sent in `Authorization` header -> Verified by `verifyAuth` middleware -> Request allowed.
 
 ### 2. Beneficiary Management Lifecycle
-1. **Registration**: Officer inputs data + GPS coordinates -> Saved as `Pending`.
-2. **Construction**: Officer updates status to `Under Construction` -> Marker on map turns Yellow.
-3. **Completion**: Officer marks as `Completed` -> Marker turns Green -> Record finalized.
+1. **Registration (v2.0 Validation)**: Officer inputs data. System validates eligibility (e.g., income thresholds) -> Saved as `Pending` with initial financial tracking setup.
+2. **Construction**: Officer updates status to `Under Construction`.
+   - **Trigger (v2.0)**: Audit log entry created. Notification queued for the beneficiary. Installment phase unlocks.
+3. **Completion**: Officer marks as `Completed`.
+   - **Trigger (v2.0)**: Marker turns Green. Beneficiary is prompted to submit a satisfaction rating.
+
+### 3. Communication Workflow (v2.0)
+- **Chat**: User sends a query -> Server stores message -> Officer's dashboard polls and receives message -> Officer replies directly.
+- **Broadcast**: Officer publishes announcement -> Priority determines UI placement -> Users see it instantly on their notice board.
 
 ---
 
@@ -207,6 +213,14 @@ We have recently integrated nine critical functional enhancements to scale the M
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/api/user/me` | Returns the profile data of the logged-in beneficiary. |
+
+### **Communication & Audit Service (v2.0)**
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET/POST` | `/api/messages` | Fetch or send chat messages between users and officers. |
+| `GET/POST` | `/api/announcements` | Retrieve or broadcast scheme guidelines and updates. |
+| `GET` | `/api/beneficiaries/:id/logs` | Fetch the complete audit trail of status changes for a record. |
+| `GET` | `/api/notifications` | Long-polling endpoint for real-time status alerts. |
 
 ---
 
@@ -243,7 +257,41 @@ Core record storage utilizing **MongoDB 2dsphere indexes** for location tracking
     type: { type: String, default: 'Point' },
     coordinates: [longitude, latitude] // Standard GeoJSON
   },
-  officerId: { type: ObjectId, ref: 'Officer' }
+  officerId: { type: ObjectId, ref: 'Officer' },
+  installments: { type: Array }, // Ledger of financial disbursements
+  satisfactionRating: { type: Number, min: 1, max: 5 },
+  completionDate: { type: Date } // Expected or actual completion date
+}
+```
+
+### **3. Audit & Communication Schemas (v2.0)**
+```javascript
+// StatusLog Schema - For Audit Trails
+{
+  beneficiaryId: { type: ObjectId, ref: 'Beneficiary' },
+  oldStatus: { type: String },
+  newStatus: { type: String },
+  changedBy: { type: ObjectId, ref: 'Officer' },
+  timestamp: { type: Date, default: Date.now }
+}
+
+// Message Schema - For User-Officer Chat
+{
+  sender: { type: ObjectId, refPath: 'senderModel' },
+  senderModel: { type: String, enum: ['Officer', 'Beneficiary'] },
+  receiver: { type: ObjectId, refPath: 'receiverModel' },
+  receiverModel: { type: String, enum: ['Officer', 'Beneficiary'] },
+  content: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now }
+}
+
+// Announcement Schema - For Notice Boards
+{
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  author: { type: ObjectId, ref: 'Officer' },
+  priority: { type: String, enum: ['Low', 'High'], default: 'Low' },
+  createdAt: { type: Date, default: Date.now }
 }
 ```
 
@@ -284,6 +332,14 @@ Core record storage utilizing **MongoDB 2dsphere indexes** for location tracking
 
 ### **4. Geospatial Engine**
 - `map.js`: Initializes the Leaflet map, fetches beneficiary coordinates, and creates custom HTML popups with dynamic status badges.
+
+### **5. Real-Time Communication (v2.0)**
+- `messages.js`: Powers the user-officer chat interface. Implements a polling mechanism to fetch new messages seamlessly without manual reloads.
+- `announcements.js`: Drives the notice board, allowing officers to broadcast important updates which are rendered instantly on the beneficiary portal.
+
+### **6. Accountability & Logging (v2.0)**
+- `activity-log.js`: Renders the administrative audit trails. It provides a visual timeline of status changes for each project, indicating who made the change and when.
+- `notifications.js`: A background service script that checks for new status updates or scheme alerts and displays non-intrusive toast notifications to the user.
 
 ---
 
@@ -369,12 +425,14 @@ The API uses standard HTTP status codes to communicate success or failure:
 - Leaflet map integration with color-coded markers.
 - Multi-format data export (PDF/Excel).
 
-### Phase 3: Accessibility & UX (In Progress)
+### Phase 3: v2.0 Advanced Features (Completed)
+- Integrated real-time polling notifications and messaging.
+- Added comprehensive audit logs and notice boards.
+- Implemented backend pagination and eligibility validation workflows.
+
+### Phase 4: Accessibility & Scale (In Progress)
 - [ ] Multi-lingual support (Hindi/English).
 - [ ] Offline caching for rural areas.
-- [ ] Form auto-save features.
-
-### Phase 4: Scale (Future)
 - [ ] Cloud storage integration for project photos.
 - [ ] AI-based eligibility scoring.
 
