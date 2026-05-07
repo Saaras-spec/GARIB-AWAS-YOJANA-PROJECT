@@ -91,6 +91,20 @@ GARIB-AWAS-YOJANA-PROJECT/
 
 ---
 
+## 🔥 What's New: Advanced Features (v2.0 Expansion)
+We have recently integrated nine critical functional enhancements to scale the MIS into a robust, enterprise-ready platform:
+*   **✅ Eligibility Validation**: Automated pre-screening logic to ensure only eligible candidates are registered.
+*   **📊 Backend Pagination & Filtering**: Optimized server-side data processing for handling large datasets efficiently without overloading the client.
+*   **📜 Audit Log System**: Comprehensive tracking of all administrative actions for strict accountability and transparent governance.
+*   **🔔 Real-Time Polling Notifications**: Instant alerts for officers and beneficiaries regarding status changes and updates.
+*   **💬 User-Officer Chat Interface**: A built-in secure messaging channel facilitating direct communication between rural beneficiaries and district officers.
+*   **⏱️ Project Completion Countdowns**: Dynamic countdown timers displaying estimated completion dates for active housing projects.
+*   **⭐ Satisfaction Ratings**: Post-completion feedback mechanism allowing beneficiaries to rate their housing quality and officer support.
+*   **💰 Installment Tracking**: Detailed ledger tracking financial disbursements in phases (e.g., Foundation, Lintel, Roof).
+*   **📢 Announcements Notice Board**: Centralized broadcast system for officers to publish scheme guidelines and urgent notices.
+
+---
+
 ## 🚀 Core Functionalities
 
 ### 👮 For Government Officers
