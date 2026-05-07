@@ -47,14 +47,21 @@ GARIB-AWAS-YOJANA-PROJECT/
 │   │   ├── announcementController.js # CRUD for Announcements
 │   │   ├── authController.js         # Authentication logic (Signup/Login)
 │   │   ├── beneficiaryController.js  # CRUD logic for Beneficiary data
-│   │   └── messageController.js      # Chat & Messaging logic
+│   │   ├── installmentController.js  # Installment & Ledger logic
+│   │   ├── logController.js          # Audit & History log logic
+│   │   ├── messageController.js      # Chat & Messaging logic
+│   │   ├── notificationController.js # Notifications & Alert logic
+│   │   └── ratingController.js       # Satisfaction Rating logic
 │   ├── middleware/                   # Request Interceptors
 │   │   └── verifyAuth.js             # JWT Verification & RBAC Guards
 │   ├── models/                       # Data Models (Mongoose Schemas)
 │   │   ├── Announcement.js           # Announcement Schema
 │   │   ├── Beneficiary.js            # Beneficiary Schema (GeoJSON)
+│   │   ├── Installment.js            # Financial Installment Schema
 │   │   ├── Message.js                # Chat Message Schema
+│   │   ├── Notification.js           # Alert Notification Schema
 │   │   ├── Officer.js                # Officer Schema (RBAC)
+│   │   ├── Rating.js                 # Feedback Rating Schema
 │   │   └── StatusLog.js              # Audit & Status Tracking Schema
 │   ├── routes/                       # Express Route Definitions
 │   │   ├── api.js                    # Protected Application Routes
@@ -66,25 +73,37 @@ GARIB-AWAS-YOJANA-PROJECT/
 ├── frontend/                         # Client-side Application (Vanilla JS)
 │   ├── css/                          # Stylesheets
 │   │   ├── auth.css                  # Specific styles for Login/Signup
+│   │   ├── login.css                 # Styling for Login Page
 │   │   └── style.css                 # Global Design System (Tokens & Variables)
 │   ├── js/                           # Global Frontend Logic
 │   │   ├── auth.js                   # Token & Session management
 │   │   └── sidebar.js                # Dynamic navigation rendering
 │   ├── officer/                      # Officer Pages & Scripts
-│   │   ├── activity-log.*            # Audit Log UI & Logic
-│   │   ├── announcements.*           # Notice Board UI & Logic
-│   │   ├── beneficiary-detail.*      # Detailed Record View UI & Logic
+│   │   ├── activity-log.html         # Audit Log UI
+│   │   ├── activity-log.js           # Audit Log Logic
+│   │   ├── announcements.html        # Notice Board UI
+│   │   ├── announcements.js          # Notice Board Logic
+│   │   ├── beneficiary-detail.html   # Detailed Record View UI
+│   │   ├── beneficiary-detail.js     # Detailed Record View Logic
+│   │   ├── dashboard.js              # Stats fetching & rendering
 │   │   ├── index.html                # Main Dashboard
-│   │   ├── manage.*                  # Records Management
-│   │   ├── map.*                     # Geographical Overview
-│   │   └── register.*                # Beneficiary Registration
+│   │   ├── manage.html               # Records Management UI
+│   │   ├── manage.js                 # Records Management Logic
+│   │   ├── map.html                  # Geographical Overview UI
+│   │   ├── map.js                    # Geographical Overview Logic
+│   │   ├── register.html             # Beneficiary Registration UI
+│   │   └── register.js               # Beneficiary Registration Logic
 │   ├── user/                         # Beneficiary (User) Pages & Scripts
-│   │   ├── details.html              # Full Profile
+│   │   ├── details.html              # Full Profile UI
 │   │   ├── index.html                # Application Status Page
-│   │   ├── map.html                  # Personal House Location
-│   │   ├── messages.*                # User-Officer Chat Interface
-│   │   ├── notifications.*           # Status Alerts UI & Logic
-│   │   └── user-dashboard.js         # Beneficiary-specific data logic
+│   │   ├── map.html                  # Personal House Location UI
+│   │   ├── messages.html             # User-Officer Chat Interface UI
+│   │   ├── messages.js               # User-Officer Chat Interface Logic
+│   │   ├── notifications.html        # Status Alerts UI
+│   │   ├── notifications.js          # Status Alerts Logic
+│   │   ├── user-dashboard.js         # Beneficiary-specific data logic
+│   │   ├── user-details.js           # Full profile view logic
+│   │   └── user-map.js               # Personal location map logic
 │   ├── login.html                    # Unified Login Portal
 │   └── signup.html                   # Officer Onboarding
 │
