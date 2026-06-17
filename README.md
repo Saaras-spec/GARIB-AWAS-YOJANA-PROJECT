@@ -487,4 +487,4 @@ The API uses standard HTTP status codes to communicate success or failure:
 *   [Portfolio](https://saaras.dev) (Placeholder)
 
 ---
-*Developed as part of the Advance Web Development Curriculum (Semester 4).*
+*Developed as part of the Advance Web Development Curriculum*
